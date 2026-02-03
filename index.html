@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <title>🤖 Learn & Play with AI</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <style>
+    body {
+      background: #1a1a2e;
+      font-family: 'Segoe UI', sans-serif;
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+    }
+    #container {
+      background: #16213e;
+      width: 90%;
+      max-width: 450px;
+      padding: 25px;
+      border-radius: 20px;
+      text-align: center;
+      border: 4px solid #e94560;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+    .screen { display: none; }
+    .active { display: block; animation: fadeIn 0.4s ease; }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .btn {
+      display: block;
+      width: 100%;
+      padding: 15px;
+      margin: 10px 0;
+      border: none;
+      border-radius: 10px;
+      font-size: 17px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .btn-easy { background: #4CAF50; color: white; }
+    .btn-med { background: #FFC107; color: #1a1a2e; }
+    .btn-hard { background: #F44336; color: white; }
+    .mode-btn { background: #0f3460; color: white; border: 1px solid #e94560; }
+
+    .ans-btn {
+      background: #ffffff1a;
+      color: white;
+      border: 1px solid #ffffff33;
+      margin: 8px 0;
+      text-align: left;
+      padding-left: 15px;
+      font-size: 16px;
+    }
+    .ans-btn:hover { background: #e94560; }
+
+    .progress-container {
+      background: #0f3460;
+      height: 10px;
+      border-radius: 5px;
+      margin: 10px 0;
+      overflow: hidden;
+    }
+    #bar { height: 100%; background: #e94560; width: 0%; }
+
+    #instant-feedback {
+      height: 22px;
+      font-weight: bold;
+      margin-top: 10px;
+      font-size: 1.1rem;
+    }
+
+    #meme-result {
+      width: 100%;
+      max-width: 250px;
+      border-radius: 15px;
+      display: none;
+      margin: 15px auto;
+      border: 3px solid #fff;
+    }
+
+    .btn-back {
+      background: none;
+      color: #aaa;
+      border: none;
+      cursor: pointer;
+      text-decoration: underline;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+
+<body>
+<div id="container">
+
+  <!-- HOME -->
+  <div id="screen-home" class="screen active">
+    <h1 style="color:#ffde59;text-shadow:2px 2px #000;">🤖 Learn & Play with AI</h1>
+    <p>Học tập vui vẻ, không lo giật mình!</p>
+    <button class="btn btn-easy" onclick="setDiff('Easy')">EASY</button>
+    <button class="btn btn-med" onclick="setDiff('Medium')">MEDIUM</button>
+    <button class="btn btn-hard" onclick="setDiff('Hard')">HARD</button>
+  </div>
+
+  <!-- MODES -->
+  <div id="screen-modes" class="screen">
+    <h2 id="diff-tag"></h2>
+    <button class="btn mode-btn" onclick="startQuiz('Vocabulary')">Vocabulary</button>
+    <button class="btn mode-btn" onclick="startQuiz('Grammar')">Grammar</button>
+    <button class="btn mode-btn" onclick="startQuiz('Sentence')">Sentence</button>
+    <button class="btn-back" onclick="showScreen('screen-home')">Quay lại</button>
+  </div>
+
+  <!-- QUIZ -->
+  <div id="screen-quiz" class="screen">
+    <div id="q-header">
+      <span id="q-count"></span>
+      <div class="progress-container"><div id="bar"></div></div>
+    </div>
+    <h3 id="question-text"></h3>
+    <div id="options-box"></div>
+    <p id="instant-feedback"></p>
+  </div>
+
+  <!-- RESULT -->
+  <div id="screen-result" class="screen">
+    <h2 id="result-title"></h2>
+    <img id="meme-result" />
+    <p id="result-text"></p>
+    <button class="btn btn-easy" onclick="showScreen('screen-modes')">Tiếp tục</button>
+  </div>
+
+</div>
+
+<script>
+const memesWrong = [
+  "https://sgs2.seeai.cc/common/c7b2f500f6d248119700552da7eabb4a1696713155223.jpg?x-oss-process=image/resize,w_800,m_lfit/quality,q_85/format,jpg",
+  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTY5TqaryF7NYO6_Owc48itB9xeXCQJVLPIIOimVo-XaIRnLD9RA13XRKfKccm6rV7iLDQ",
+  "https://i.pinimg.com/736x/72/1b/11/721b11322e890e5ec46ed3c7a2c07190.jpg"
+];
+const memesCorrect = [
+  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcStOU6D7bjPTtUaU_UF0mqZpoNmvxU4YZWP52WG5NRr4sAMq8Mo13JgA-X96lVzHhkeVuU",
+  "https://i.postimg.cc/pT3kL46K/1000017085.jpg",
+  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSXHrhULKpz_EyPSppxOvcAzZK1VFfg1TxT9ZMpRMoATil41dqybfmU615kCzcDNpJNx0I"
+];
+
+const soundCorrect = new Audio("https://assets.mixkit.co/active_storage/sfx/2000/2000-preview.mp3");
+const soundWrong   = new Audio("https://assets.mixkit.co/active_storage/sfx/2003/2003-preview.mp3");
+
+const rawData = {
+  Easy: {
+    Vocabulary: [
+      {q:"virtual (nghĩa là gì?)", a:"ảo", opts:["ảo","con người","sự thật"]},
+      {q:"chatbot (nghĩa là gì?)", a:"hộp trò chuyện", opts:["hộp trò chuyện","nói chuyện","kể chuyện"]},
+      {q:"data (nghĩa là gì?)", a:"dữ liệu", opts:["dữ liệu","lưu dữ","thông tin"]}
+    ],
+    Grammar: [
+      {q:"AI_____people work faster.", a:"helps", opts:["helps","help","are help","helping"]},
+      {q:"Machines_____learn from data.", a:"can", opts:["does","can","are","is"]},
+      {q:"My smartphone_____very smart.", a:"is", opts:["be","are","am","is"]}
+    ],
+    Sentence: [
+      {q:"AI_____a lot of data to learn.", a:"needs", opts:["need","needs","needing","is need"]},
+      {q:"Robots_____perform dangerous tasks.", a:"can", opts:["can","are","do","is"]},
+      {q:"This smart camera_____very modern.", a:"is", opts:["am","are","is","be"]}
+    ]
+  }
+};
+
+let currentDiff="", currentMode="", questions=[], index=0, score=0;
+
+function shuffle(arr){
+  return arr.sort(()=>Math.random()-0.5);
+}
+
+function showScreen(id){
+  document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+}
+
+function setDiff(d){
+  currentDiff=d;
+  document.getElementById("diff-tag").innerText="Cấp độ: "+d;
+  soundCorrect.load(); soundWrong.load();
+  showScreen("screen-modes");
+}
+
+function startQuiz(m){
+  currentMode=m;
+  questions=shuffle([...rawData[currentDiff][m]]);
+  index=0; score=0;
+  showScreen("screen-quiz");
+  loadQuestion();
+}
+
+function loadQuestion(){
+  const q=questions[index];
+  document.getElementById("q-count").innerText=`Câu ${index+1}/3`;
+  document.getElementById("bar").style.width=(index/3*100)+"%";
+  document.getElementById("question-text").innerText=q.q;
+  document.getElementById("instant-feedback").innerText="";
+  const box=document.getElementById("options-box");
+  box.innerHTML="";
+  shuffle([...q.opts]).forEach(o=>{
+    const b=document.createElement("button");
+    b.className="btn ans-btn";
+    b.innerText=o;
+    b.onclick=()=>answer(o,q.a);
+    box.appendChild(b);
+  });
+}
+
+function answer(sel, cor){
+  const fb=document.getElementById("instant-feedback");
+  if(sel===cor){
+    score++; soundCorrect.play();
+    fb.innerText="Chính xác! ✨"; fb.style.color="#2ecc71";
+  } else {
+    soundWrong.play();
+    fb.innerText="Sai rồi! ❌"; fb.style.color="#e74c3c";
+  }
+  document.querySelectorAll(".ans-btn").forEach(b=>b.disabled=true);
+  setTimeout(()=>{ index<2 ? (index++,loadQuestion()) : showResult(); },1200);
+}
+
+function showResult(){
+  showScreen("screen-result");
+  const img=document.getElementById("meme-result");
+  img.style.display="block";
+  if(score>1){
+    document.getElementById("result-title").innerText="THẬT TUYỆT VỜI!";
+    img.src=memesCorrect[Math.floor(Math.random()*3)];
+  } else {
+    document.getElementById("result-title").innerText="ĐỪNG NẢN LÒNG!";
+    img.src=memesWrong[Math.floor(Math.random()*3)];
+  }
+  document.getElementById("result-text").innerText=`Kết quả: ${score}/3 câu đúng`;
+}
+</script>
+</body>
+</html>
