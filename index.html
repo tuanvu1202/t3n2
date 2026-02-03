@@ -1,19 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Learn & Play with AI</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
 </head>
-
 <body>
-<div id="game-app">
+  <div id="game-app">
   <div id="container">
-
-    <!-- HOME -->
     <div id="screen-home" class="screen active">
-      <h1 style="color:#ffde59;text-shadow:2px 2px #000;font-size:28px;">🤖 Learn & Play with AI</h1>
-      <p>Chọn độ khó để thử thách bản thân:</p>
+      <h1 style="color: #ffde59; text-shadow: 2px 2px #000; font-size: 28px;">🤖 Learn & Play with AI</h1>
+      <p>Chọn độ khó để bắt đầu:</p>
       <div class="menu">
         <button class="btn btn-easy" onclick="setDiff('Easy')">EASY</button>
         <button class="btn btn-med" onclick="setDiff('Medium')">MEDIUM</button>
@@ -21,140 +18,191 @@
       </div>
     </div>
 
-    <!-- MODE -->
     <div id="screen-modes" class="screen">
-      <h2 id="diff-tag" style="color:#ffde59;"></h2>
-      <div class="menu">
-        <button class="btn mode-btn" onclick="startQuiz('Vocabulary')">Vocabulary</button>
-        <button class="btn mode-btn" onclick="startQuiz('Grammar')">Grammar</button>
-        <button class="btn mode-btn" onclick="startQuiz('Sentence')">Sentence</button>
-      </div>
-      <button class="btn-back" onclick="showScreen('screen-home')">← Quay lại</button>
+      <h2 id="diff-tag" style="color: #ffde59; text-transform: uppercase;"></h2>
+      <button class="btn mode-btn" onclick="startQuiz('Vocabulary')">Vocabulary</button>
+      <button class="btn mode-btn" onclick="startQuiz('Grammar')">Grammar</button>
+      <button class="btn mode-btn" onclick="startQuiz('Sentence')">Sentence</button>
+      <button class="btn-back" onclick="showScreen('screen-home')">Quay lại</button>
     </div>
 
-    <!-- QUIZ -->
     <div id="screen-quiz" class="screen">
       <div id="q-header">
         <span id="q-count"></span>
         <div class="progress-container"><div id="bar"></div></div>
       </div>
-      <h3 id="question-text"></h3>
+      <h3 id="question-text" style="min-height: 50px;"></h3>
       <div id="options-box"></div>
       <p id="instant-feedback"></p>
     </div>
 
-    <!-- RESULT -->
     <div id="screen-result" class="screen">
       <h2 id="result-title"></h2>
-      <img id="meme-result">
+      <img id="meme-result" src="" alt="Meme Result">
       <p id="result-text"></p>
-      <button class="btn btn-easy" onclick="showScreen('screen-modes')">Tiếp tục</button>
-      <button class="btn-back" onclick="showScreen('screen-home')">Về trang chính</button>
+      <button class="btn btn-easy" onclick="showScreen('screen-modes')">Chơi tiếp chủ đề này</button>
+      <button class="btn-back" onclick="showScreen('screen-home')">Về màn hình chính</button>
     </div>
-
   </div>
 </div>
 
 <style>
-body{background:#1a1a2e;font-family:Segoe UI;color:white;display:flex;justify-content:center;align-items:center;height:100vh;margin:0}
-#container{background:#16213e;width:90%;max-width:450px;padding:25px;border-radius:20px;border:4px solid #e94560}
-.screen{display:none}
-.active{display:block;animation:fade .3s}
-@keyframes fade{from{opacity:0;transform:translateY(10px)}to{opacity:1}}
-.btn{width:100%;padding:15px;margin:10px 0;border:none;border-radius:10px;font-weight:bold;cursor:pointer}
-.btn-easy{background:#4CAF50;color:white}
-.btn-med{background:#FFC107;color:#000}
-.btn-hard{background:#F44336;color:white}
-.mode-btn{background:#0f3460;color:white;border:1px solid #e94560}
-.ans-btn{background:#ffffff1a;color:white;border:1px solid #ffffff33;text-align:left}
-.ans-btn:hover{background:#e94560}
-.progress-container{height:12px;background:#0f3460;border-radius:6px;margin:15px 0}
-#bar{height:100%;background:linear-gradient(90deg,#e94560,#ffde59);width:0%}
-#meme-result{width:100%;max-width:280px;border-radius:15px;margin:15px auto;display:none}
-.btn-back{background:none;color:#aaa;border:none;text-decoration:underline;cursor:pointer}
+  body { background: #1a1a2e; font-family: 'Segoe UI', sans-serif; color: white; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; overflow-x: hidden; }
+  #container { background: #16213e; width: 90%; max-width: 450px; padding: 25px; border-radius: 20px; text-align: center; border: 4px solid #e94560; box-shadow: 0 10px 30px rgba(0,0,0,0.5); position: relative; }
+  .screen { display: none; }
+  .active { display: block; animation: fadeIn 0.4s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+  .btn { display: block; width: 100%; padding: 15px; margin: 10px 0; border: none; border-radius: 10px; font-size: 17px; font-weight: bold; cursor: pointer; transition: 0.2s; }
+  .btn:active { transform: scale(0.97); }
+  .btn-easy { background: #4CAF50; color: white; }
+  .btn-med { background: #FFC107; color: #1a1a2e; }
+  .btn-hard { background: #F44336; color: white; }
+  .mode-btn { background: #0f3460; color: white; border: 1px solid #e94560; }
+  .ans-btn { background: #ffffff1a; color: white; border: 1px solid #ffffff33; margin: 8px 0; text-align: left; padding-left: 15px; font-size: 16px; font-weight: normal; }
+  .ans-btn:hover:not(:disabled) { background: #e94560; border-color: #e94560; }
+  #meme-result { width: 100%; max-width: 250px; border-radius: 15px; display: none; margin: 15px auto; border: 3px solid #fff; }
+  .progress-container { background: #0f3460; height: 10px; border-radius: 5px; margin: 10px 0; overflow: hidden; }
+  #bar { height: 100%; background: #e94560; width: 0%; transition: 0.3s; }
+  #instant-feedback { height: 20px; font-weight: bold; margin-top: 10px; font-size: 1.1rem; }
+  .btn-back { background: none; color: #999; border: none; cursor: pointer; text-decoration: underline; margin-top: 10px; }
 </style>
 
 <script>
-const memesWrong=[
-"https://i.pinimg.com/736x/72/1b/11/721b11322e890e5ec46ed3c7a2c07190.jpg"
-];
-const memesCorrect=[
-"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcStOU6D7bjPTtUaU_UF0mqZpoNmvxU4YZWP52WG5NRr4sAMq8Mo13JgA-X96lVzHhkeVuU"
-];
+  // Link Meme chính xác theo thứ tự
+  const memesWrong = [ "https://sgs2.seeai.cc/common/c7b2f500f6d248119700552da7eabb4a1696713155223.jpg?x-oss-process=image/resize,w_800,m_lfit/quality,q_85/format,jpg", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTY5TqaryF7NYO6_Owc48itB9xeXCQJVLPIIOimVo-XaIRnLD9RA13XRKfKccm6rV7iLDQ", "https://i.pinimg.com/736x/72/1b/11/721b11322e890e5ec46ed3c7a2c07190.jpg" ]; const memesCorrect = [ "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcStOU6D7bjPTtUaU_UF0mqZpoNmvxU4YZWP52WG5NRr4sAMq8Mo13JgA-X96lVzHhkeVuU", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTY130p_oIbheAr9n_2QUUfd4S5z-RxNR_NgBCaqw7Vbf6Syw2RliXAb-eeokMz_GgPJFw", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSXHrhULKpz_EyPSppxOvcAzZK1VFfg1TxT9ZMpRMoATil41dqybfmU615kCzcDNpJNx0I" ];
 
-const soundCorrect=new Audio("https://assets.mixkit.co/active_storage/sfx/2000/2000-preview.mp3");
-const soundWrong=new Audio("https://assets.mixkit.co/active_storage/sfx/2003/2003-preview.mp3");
+  // Âm thanh
+  const soundCorrect = new Audio('https://assets.mixkit.co/active_storage/sfx/2000/2000-preview.mp3');
+  const soundWrong = new Audio('https://assets.mixkit.co/active_storage/sfx/2003/2003-preview.mp3');
 
-const gameData={
-Easy:{
-Vocabulary:[
-{q:"Nghĩa của virtual?",a:"ảo",opts:["ảo","thật","con người"]},
-{q:"Nghĩa của data?",a:"dữ liệu",opts:["dữ liệu","tin đồn","bộ nhớ"]}
-]
-}
-};
+  // Dữ liệu 27 câu hỏi đầy đủ
+  const gameData = {
+    Easy: {
+      Vocabulary: [{q: "virtual nghĩa là gì?", a: "ảo", opts: ["ảo", "con người", "sự thật"]}, {q: "chatbot nghĩa là gì?", a: "hộp trò chuyện", opts: ["hộp trò chuyện", "nói chuyện", "kể chuyện"]}, {q: "data nghĩa là gì?", a: "dữ liệu", opts: ["dữ liệu", "lưu dữ", "thông tin"]}],
+      Grammar: [{q: "AI_____people work faster.", a: "helps", opts: ["helps", "help", "are help", "helping"]}, {q: "Machines_____learn from data.", a: "can", opts: ["does", "can", "are", "is"]}, {q: "My smartphone_____very smart.", a: "is", opts: ["be", "are", "am", "is"]}],
+      Sentence: [{q: "AI_____a lot of data to learn.", a: "needs", opts: ["need", "needs", "needing", "is need"]}, {q: "Robots_____perform dangerous tasks.", a: "can", opts: ["can", "are", "do", "is"]}, {q: "This smart camera_____very modern.", a: "is", opts: ["am", "are", "is", "be"]}]
+    },
+    Medium: {
+      Vocabulary: [{q: "upgrade nghĩa là gì?", a: "nâng cấp", opts: ["nâng cấp", "lên cấp", "tạm dừng"]}, {q: "programme nghĩa là gì?", a: "lập trình", opts: ["lập trình", "tự động", "vấn đề"]}, {q: "advanced nghĩa là gì?", a: "tiên tiến", opts: ["tiên tiến", "quảng cáo", "thời đồ đá"]}],
+      Grammar: [{q: "Scientists_____new AI models recently.", a: "have developed", opts: ["has developed", "have developed", "developing", "was develop"]}, {q: "Bị động: 'People use smartphones...'", a: "Smartphones are used for many daily tasks.", opts: ["Smartphones are used for many daily tasks.", "Smartphones are use...", "Smartphones is used...", "Smartphones were use..."]}, {q: "Vị trí 'often': Smart devices collect info.", a: "often / ∅", opts: ["often / ∅", "∅ / often", "are often / ∅", "oftenly / ∅"]}],
+      Sentence: [{q: "Many new apps_____by developers this year.", a: "have been created", opts: ["have been created", "has been created", "are create", "created"]}, {q: "Machines_____solve complex problems.", a: "quickly", opts: ["quick", "quickly", "more quick", "quickest"]}, {q: "We_____used AI for a long time.", a: "have", opts: ["are", "did", "have", "has"]}]
+    },
+    Hard: {
+      Vocabulary: [{q: "Artificial Intelligence là gì?", a: "trí tuệ nhân tạo", opts: ["trí tuệ nhân tạo", "trí tuệ tự nhiên", "nghệ thuật thủ công"]}, {q: "Algorithm là gì?", a: "thuật toán", opts: ["thuật toán", "đại số", "ngẫu nhiên"]}, {q: "Neural Network là gì?", a: "mạng nơ-ron", opts: ["mạng nơ-ron", "mạng toàn cầu", "không kết nối"]}],
+      Grammar: [{q: "If the company_____last year, they_____.", a: "had invested / would have achieved", opts: ["invested / would achieve", "invests / will achieve", "had invested / would have achieved", "has invested / achieved"]}, {q: "Reduced relative: 'The devices_____in that factory...'", a: "manufactured", opts: ["manufactured", "which manufactured", "manufacturing", "manufacture"]}, {q: "Inversion: 'Not only_____smart machines...'", a: "do", opts: ["do", "are", "does", "have"]}],
+      Sentence: [{q: "The AI system_____by that team is advanced.", a: "developed", opts: ["developing", "developed", "was developed", "which developed"]}, {q: "If power had gone out, the server_____.", a: "would have stopped", opts: ["would stop", "will stop", "would have stopped", "stopped"]}, {q: "Inversion: 'Not only_____images, but AI composes music.'", a: "does it generate", opts: ["does it generate", "it generates", "did it generated", "it generate"]}]
+    }
+  };
 
-let currentDiff="",currentMode="",questions=[],currentIndex=0,score=0;
+  let currentDiff = '', questions = [], currentIndex = 0, score = 0;
 
-function showScreen(id){
-document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
-document.getElementById(id).classList.add("active");
-}
+  function shuffle(array) {
+    let m = array.length, t, i;
+    while (m) {
+      i = Math.floor(Math.random() * m--);
+      t = array[m];
+      array[m] = array[i];
+      array[i] = t;
+    }
+    return array;
+  }
 
-function setDiff(d){
-currentDiff=d;
-document.getElementById("diff-tag").innerText=`Cấp độ: ${d}`;
-showScreen("screen-modes");
-}
+  function showScreen(id) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    // Reset Meme nếu quay về màn hình chọn
+    if (id === 'screen-modes' || id === 'screen-home') {
+      document.getElementById('meme-result').style.display = "none";
+    }
+  }
 
-function startQuiz(m){
-currentMode=m;
-questions=[...gameData[currentDiff][currentMode]];
-currentIndex=0;score=0;
-showScreen("screen-quiz");
-loadQuestion();
-}
+  function setDiff(d) {
+    currentDiff = d;
+    document.getElementById('diff-tag').innerText = "Cấp độ: " + d;
+    showScreen('screen-modes');
+    // Kích hoạt âm thanh (bypass autoplay policy)
+    soundCorrect.play().then(() => { soundCorrect.pause(); soundCorrect.currentTime = 0; });
+  }
 
-function loadQuestion(){
-const q=questions[currentIndex];
-document.getElementById("q-count").innerText=`Câu ${currentIndex+1}/${questions.length}`;
-document.getElementById("bar").style.width=((currentIndex+1)/questions.length*100)+"%";
-document.getElementById("question-text").innerText=q.q;
-const box=document.getElementById("options-box");
-box.innerHTML="";
-q.opts.forEach(opt=>{
-const b=document.createElement("button");
-b.className="btn ans-btn";
-b.innerText=opt;
-b.onclick=()=>handleAnswer(opt,q.a);
-box.appendChild(b);
-});
-}
+  function startQuiz(m) {
+    // Đảm bảo lấy dữ liệu mới và xáo trộn hoàn toàn
+    questions = shuffle(JSON.parse(JSON.stringify(gameData[currentDiff][m])));
+    currentIndex = 0;
+    score = 0;
+    showScreen('screen-quiz');
+    loadQuestion();
+  }
 
-function handleAnswer(sel,cor){
-document.querySelectorAll(".ans-btn").forEach(b=>b.disabled=true);
-if(sel===cor){score++;soundCorrect.play()}
-else{soundWrong.play()}
-setTimeout(()=>{
-currentIndex++;
-currentIndex<questions.length?loadQuestion():showResult();
-},1000);
-}
+  function loadQuestion() {
+    const q = questions[currentIndex];
+    document.getElementById('q-count').innerText = `Câu ${currentIndex + 1}/3`;
+    document.getElementById('bar').style.width = ((currentIndex) / 3 * 100) + "%";
+    document.getElementById('question-text').innerText = q.q;
+    document.getElementById('instant-feedback').innerText = "";
+    
+    const box = document.getElementById('options-box');
+    box.innerHTML = "";
+    
+    // Xáo trộn đáp án như mã đề thi
+    const shuffledOpts = shuffle([...q.opts]);
+    shuffledOpts.forEach(opt => {
+      const btn = document.createElement('button');
+      btn.className = "btn ans-btn";
+      btn.innerText = opt;
+      btn.onclick = () => handleAnswer(opt, q.a);
+      box.appendChild(btn);
+    });
+  }
 
-function showResult(){
-showScreen("screen-result");
-const img=document.getElementById("meme-result");
-img.style.display="block";
-if(score>=1){
-img.src=memesCorrect[0];
-document.getElementById("result-title").innerText="Tuyệt vời!";
-document.getElementById("result-text").innerText=`Bạn đúng ${score}/${questions.length} câu`;
-}else{
-img.src=memesWrong[0];
-document.getElementById("result-title").innerText="Cố lên!";
-document.getElementById("result-text").innerText=`Bạn đúng ${score}/${questions.length} câu`;
-}
-}
+  function handleAnswer(selected, correct) {
+    const feedback = document.getElementById('instant-feedback');
+    const btns = document.querySelectorAll('.ans-btn');
+    btns.forEach(b => b.disabled = true);
+
+    if (selected === correct) {
+      score++;
+      soundCorrect.currentTime = 0;
+      soundCorrect.play().catch(()=>{});
+      feedback.innerText = "Chính xác! ✨";
+      feedback.style.color = "#2ecc71";
+    } else {
+      soundWrong.currentTime = 0;
+      soundWrong.play().catch(()=>{});
+      feedback.innerText = "Sai rồi! ❌";
+      feedback.style.color = "#e74c3c";
+    }
+
+    setTimeout(() => {
+      currentIndex++;
+      if (currentIndex < 3) {
+        loadQuestion();
+      } else {
+        document.getElementById('bar').style.width = "100%";
+        showMemeResult();
+      }
+    }, 1100);
+  }
+
+  function showMemeResult() {
+    showScreen('screen-result');
+    const memeImg = document.getElementById('meme-result');
+    const resText = document.getElementById('result-text');
+    const resTitle = document.getElementById('result-title');
+    memeImg.style.display = "block";
+
+    // Logic Meme theo tỉ lệ Đúng/Sai (Đúng >= 2 câu là tỉ lệ cao)
+    if (score >= 2) {
+      resTitle.innerText = "XUẤT SẮC!";
+      resTitle.style.color = "#2ecc71";
+      memeImg.src = memesCorrect[Math.floor(Math.random() * 3)];
+      resText.innerText = `Bạn đã hoàn thành với ${score}/3 câu đúng!`;
+    } else {
+      resTitle.innerText = "CỐ GẮNG LÊN!";
+      resTitle.style.color = "#e74c3c";
+      memeImg.src = memesWrong[Math.floor(Math.random() * 3)];
+      resText.innerText = `Bạn chỉ đúng ${score}/3 câu. Hãy luyện tập thêm!`;
+    }
+  }
 </script>
 </body>
 </html>
